@@ -32,6 +32,21 @@ $stundents->createProfile();
           </div>
 
           <div class="form-group">
+            <label for="faculty">Faculty</label>
+            <input name="faculty" type="text" class="form-control" placeholder="Enter Faculty" id="faculty">
+          </div>
+
+          <div class="form-group">
+            <label for="school">School/University</label>
+            <input name="school" type="text" class="form-control" placeholder="Enter School or University" id="school">
+          </div>
+
+          <div class="form-group">
+            <label for="about">About me</label>
+            <textarea name="about" type="text" class="form-control" id="about" placeholder="Write about yourself"></textarea>
+          </div>
+
+          <div class="form-group">
             <label for="picture">Profile Picture</label>
             <input name="picture" type="file" class="form-control" id="picture">
           </div>

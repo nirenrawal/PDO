@@ -2,7 +2,7 @@
 include "./includes/autoload.php";
 $stundents = new Students();
 $session = $stundents->getSession();
-echo $session;
+// echo $session;
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +19,7 @@ echo $session;
   <!-- google fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles/style.css">
   <title>Register</title>
 </head>
 

@@ -5,7 +5,6 @@
       <div class="col-xl-6 m-auto text-center">
         <div class="copyright">
           <p>Made with <a href="https://www.creative-tim.com/product/argon-dashboard" target="_blank">Argon Dashboard</a> by Creative Tim</p>
-          <?php if(isset($_SESSION['email'])){ ?> <a style="text-decoration: none; color:black;" href="logout.php">Logout</a> <?php } ?>
         </div>
       </div>
     </div>
