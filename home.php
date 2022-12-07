@@ -16,7 +16,7 @@ $year = $dob->diff($today)->y;
 <div class="main-content">
     <div class="container mt-7">
         <!-- Table -->
-        <h2 class="mb-5">Profile Card</h2>
+        <h2 class="mb-5">Welcome <?php echo $a[0]->name; ?></h2>
         <div class="row">
             <div class="col-xl-8 m-auto order-xl-2 mb-5 mb-xl-0">
                 <div class="card card-profile shadow">
@@ -31,7 +31,7 @@ $year = $dob->diff($today)->y;
                     </div>
                     <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                         <div class="d-flex justify-content-between">
-                            <a href="#" class="btn btn-sm btn-info mr-4">Edit Profile</a>
+                            <a type="button" onclick="window.location='update-profile.php';" class="btn btn-sm btn-info mr-4">Edit Profile</a>
                             <a href="#" class="btn btn-sm btn-default float-right">Delete Profile</a>
                         </div>
                     </div>

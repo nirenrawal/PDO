@@ -4,12 +4,19 @@ class Admin extends Db
 {
     public function getStudents()
     {
+        if (!isset($_SESSION['email'])) {
+            header("location:login.php");
+        }
         $sql = "SELECT * FROM students WHERE user_type = '0' ORDER BY id DESC";
         $statement = $this->connect()->prepare($sql);
         $statement->execute();
-        while ($result = $statement->fetchAll()) {
-            return $result;
-        }
+        $data = $statement->fetchAll();
+        return $data;
+
+       
+        // while ($result = $data) {
+        //     return $result;
+        // }
     }
 
 

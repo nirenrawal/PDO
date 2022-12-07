@@ -86,8 +86,36 @@ class Students extends Db
       return $data;
    }
 
+   public function updateProfile()
+   {
+      if (!isset($_SESSION['email'])) {
+         header("location:login.php");
+      }
+      if (!empty($_POST)) {
+         $name = htmlspecialchars($_POST['name']);
+         $dob = htmlspecialchars($_POST['dob']);
+         $address = htmlspecialchars($_POST['address']);
+         $faculty = htmlspecialchars($_POST['faculty']);
+         $school = htmlspecialchars($_POST['school']);
+         $about = htmlspecialchars($_POST['about']);
+         $email = $_SESSION['email'];
+         $statement = $this->connect()->prepare('UPDATE students VALUES(name = :name, dob = :dob, address = :address, faculty = :faculty, school = :school, about = :about, WHERE email = :email');
+         $statement->bindValue(':name', $name);
+         $statement->bindValue(':dob', $dob);
+         $statement->bindValue(':address', $address);
+         $statement->bindValue(':faculty', $faculty);
+         $statement->bindValue(':school', $school);
+         $statement->bindValue(':about', $about);
+         $statement->bindValue(':email', $email);
+         $statement->execute();
 
-   
+      $sql = "SELECT * FROM students WHERE email = $email";
+        $statement = $this->connect()->prepare($sql);
+        $statement->execute();
+      }
+   }
+
+
 
    public function getSession()
    {
@@ -109,6 +137,4 @@ class Students extends Db
          header('location:login.php');
       }
    }
-
-   
 }
