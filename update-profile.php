@@ -3,7 +3,7 @@ require_once('template/header.php');
 
 $student = new Students();
 $data = $student->updateProfile();
-echo $data[0]->name;
+echo $data->name;
 ?>
 
 

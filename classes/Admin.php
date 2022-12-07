@@ -12,13 +12,7 @@ class Admin extends Db
         $statement->execute();
         $data = $statement->fetchAll();
         return $data;
-
-       
-        // while ($result = $data) {
-        //     return $result;
-        // }
     }
-
 
 
     public function login()
@@ -52,11 +46,51 @@ class Admin extends Db
                         }
                     } else {
                         $message = '<label>Wrong Data</label>';
+                        return $message;
                     }
                 }
             }
         } catch (PDOException $error) {
             $message = $error->getMessage();
         }
+    }
+
+
+
+    public function delete()
+    {
+        if (!isset($_SESSION['email'])) {
+            header('location:login.php');
+        }
+
+        $email = $_SESSION['email'];
+      
+        // echo $email;
+        $q = $this->connect()->prepare("SELECT * FROM students WHERE email = :email");
+        $q->bindValue(':email', $email);
+        $q->execute();
+        $data = $q->fetchAll();
+        //  // print_r($data);
+        return $data;
+        if ($data['user_type'] != 1) {
+            header("location:home.php");
+        }
+        $id = $_GET['id'];
+        $sql = 'DELETE FROM students '
+                . 'WHERE id = :id';
+
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->bindValue(':id', $id);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
+        // if (!empty($_GET['hash_key'])) {
+        //     $hash_key = $_GET['hash_key'];
+        //     $q = $this->connect()->prepare("DELETE * FROM students WHERE hash_key = :hash_key");
+        //     $q->bindValue(':hash_key', $hash_key);
+        //     $q->execute();
+        //     return $q->rowCount();
+        // }
     }
 }

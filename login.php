@@ -21,9 +21,9 @@ $msg = $admin->login();
 
 
         <form method="post">
-          <?php  if(isset($message))  
+          <?php  if(isset($msg))  
                 {  
-                     echo '<label class="text-danger">'.$message.'</label>';  
+                     echo '<label class="text-danger">'.$msg.'</label>';  
                 }   ?>
           <div class="form-group">
             <label for="email">Email address</label>

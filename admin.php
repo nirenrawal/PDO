@@ -3,11 +3,12 @@ include('template/header.php');
 
 $admin = new Admin();
 $students = $admin->getStudents();
+$del_students = $admin->delete();
 
 
 ?>
 
-
+<h1 class="text-center pt-3 pb-2">List of the Users</h1>
 <table class="table">
   <thead>
     <tr>
@@ -60,7 +61,7 @@ $students = $admin->getStudents();
         <img src="images/profile_pictures/<?php echo $student->picture; ?>" width="50" height="50">
         </td>
         <td>
-        <a href="delete.php?key=<?php echo $student->hash_key;?>" onclick="return confirm('Are you sure?');" type="button" onclick="window.location='update-profile.php';" class="btn btn-sm btn-danger mr-4">Delete</a>
+        <a href="$del_students?id=<?php echo $student->id;?>" onclick="return confirm('Are you sure?');" type="button" onclick="window.location='admin.php.php';" class="btn btn-sm btn-danger mr-4">Delete</a>
         </td>
       </tr>
     <?php
