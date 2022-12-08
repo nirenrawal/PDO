@@ -21,6 +21,9 @@ class Students extends Db
                   $name = htmlspecialchars($_POST['name']);
                   $dob = htmlspecialchars($_POST['dob']);
                   $address = htmlspecialchars($_POST['address']);
+                  $faculty = htmlspecialchars($_POST['faculty']);
+                  $school = htmlspecialchars($_POST['school']);
+                  $about = htmlspecialchars($_POST['about']);
                   $email = htmlspecialchars($_POST['email']);
                   $password = htmlspecialchars(sha1($_POST['password']));
                   $picture = $file_id;
@@ -29,7 +32,7 @@ class Students extends Db
                   $agent = $_SERVER['HTTP_USER_AGENT'];
                   $ip = $_SERVER['REMOTE_ADDR'];
 
-                  $statement = $this->connect()->prepare('INSERT INTO students VALUES(:id, :user_type, :hash_key, :name, :dob, :address, :email, :password, :picture, :time, :date, :agent, :ip)');
+                  $statement = $this->connect()->prepare('INSERT INTO students VALUES(:id, :user_type, :hash_key, :name, :dob, :address, :faculty, :school, :about, :email, :password, :picture, :time, :date, :agent, :ip)');
 
                   $statement->bindValue(':id', null);
                   $statement->bindValue(':user_type', $user_type);
@@ -37,6 +40,9 @@ class Students extends Db
                   $statement->bindValue(':name', $name);
                   $statement->bindValue(':dob', $dob);
                   $statement->bindValue(':address', $address);
+                  $statement->bindValue(':faculty', $faculty);
+                  $statement->bindValue(':school', $school);
+                  $statement->bindValue(':about', $about);
                   $statement->bindValue(':email', $email);
                   $statement->bindValue(':password', $password);
                   $statement->bindValue(':picture', $picture);
@@ -64,7 +70,6 @@ class Students extends Db
    }
 
 
-
    public function profilePage()
    {
       if (!isset($_SESSION['email'])) {
@@ -72,15 +77,45 @@ class Students extends Db
       }
 
       $email = $_SESSION['email'];
-      echo $email;
+      // echo $email;
       $q = $this->connect()->prepare("SELECT * FROM students where email = :email");
       $q->bindValue(':email', $email);
       $q->execute();
       $data = $q->fetchAll();
       // print_r($data);
       return $data;
-
    }
+
+   public function updateProfile()
+   {
+      if (!isset($_SESSION['email'])) {
+         header("location:login.php");
+      }
+      if (!empty($_POST)) {
+         $name = htmlspecialchars($_POST['name']);
+         $dob = htmlspecialchars($_POST['dob']);
+         $address = htmlspecialchars($_POST['address']);
+         $faculty = htmlspecialchars($_POST['faculty']);
+         $school = htmlspecialchars($_POST['school']);
+         $about = htmlspecialchars($_POST['about']);
+         $email = $_SESSION['email'];
+         $statement = $this->connect()->prepare('UPDATE students VALUES(name = :name, dob = :dob, address = :address, faculty = :faculty, school = :school, about = :about, WHERE email = :email');
+         $statement->bindValue(':name', $name);
+         $statement->bindValue(':dob', $dob);
+         $statement->bindValue(':address', $address);
+         $statement->bindValue(':faculty', $faculty);
+         $statement->bindValue(':school', $school);
+         $statement->bindValue(':about', $about);
+         $statement->bindValue(':email', $email);
+         $statement->execute();
+
+      $sql = "SELECT * FROM students WHERE email = $email";
+        $statement = $this->connect()->prepare($sql);
+        $statement->execute();
+      }
+   }
+
+
 
    public function getSession()
    {
@@ -102,6 +137,4 @@ class Students extends Db
          header('location:login.php');
       }
    }
-
-   
 }

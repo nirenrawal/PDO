@@ -10,7 +10,7 @@ class Db
 {
     private $dbUsername = "root";
     private $dbPassword = "root";
-    private $connection = "mysql:host=localhost; dbname=majorproject; charset=utf8mb4";
+    private $connection = "mysql:host=localhost; dbname=php_project; charset=utf8mb4";
 
     public function connect()
     {

@@ -1,17 +1,17 @@
-<?php
+<?php 
 require_once('template/header.php');
 
-
-$stundents = new Students();
-$stundents->createProfile();
-
+$student = new Students();
+$data = $student->updateProfile();
+echo $data->name;
 ?>
+
+
 <section class="pt-5">
   <div class="row">
     <div class="container">
       <div class="jumbotron">
-        <h1 class="display-4 text-center">Create a profile</h1>
-        <p class="lead">Please enter your credentials to register.</p>
+        <h1 class="display-4 text-center">Update Your Profile</h1>
         <hr class="my-4">
 
 
@@ -28,12 +28,12 @@ $stundents->createProfile();
 
           <div class="form-group">
             <label for="address">Address</label>
-            <textarea name="address" type="text" class="form-control" id="address" placeholder="Enter Address"></textarea>
+            <textarea name="address" type="text" class="form-control" id="address" placeholder="Enter Address"><?php echo $data[0]->address; ?></textarea>
           </div>
 
           <div class="form-group">
             <label for="faculty">Faculty</label>
-            <input name="faculty" type="text" class="form-control" placeholder="Enter Faculty" id="faculty">
+            <input name="faculty" type="text" class="form-control" placeholder="Enter Faculty" id="faculty" value="">
           </div>
 
           <div class="form-group">
@@ -67,10 +67,13 @@ $stundents->createProfile();
           </div>
 
           <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure, you want to register?'); window.location='login.php'">Register</button>
+          <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure, you want to register?'); window.location='login.php'">Register</button>
         </form>
       </div>
     </div>
   </div>
 </section>
+
+
 
 <?php require_once('template/footer.php'); ?>
