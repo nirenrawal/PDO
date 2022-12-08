@@ -57,7 +57,7 @@ class Admin extends Db
 
 
 
-    public function delete()
+    public function deleteOne()
     {
         if (!isset($_SESSION['email'])) {
             header('location:login.php');

@@ -3,7 +3,7 @@ include('template/header.php');
 
 $admin = new Admin();
 $students = $admin->getStudents();
-$del_students = $admin->delete();
+$del_students = $admin->deleteOne();
 
 
 ?>
@@ -61,7 +61,7 @@ $del_students = $admin->delete();
         <img src="images/profile_pictures/<?php echo $student->picture; ?>" width="50" height="50">
         </td>
         <td>
-        <a href="$del_students?id=<?php echo $student->id;?>" onclick="return confirm('Are you sure?');" type="button" onclick="window.location='admin.php.php';" class="btn btn-sm btn-danger mr-4">Delete</a>
+        <a href="$delete_students?id=<?php echo $student->id;?>" onclick="return confirm('Are you sure?');" type="button" onclick="window.location='admin.php';" class="btn btn-sm btn-danger mr-4">Delete</a>
         </td>
       </tr>
     <?php
