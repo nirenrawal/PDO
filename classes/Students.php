@@ -92,27 +92,40 @@ class Students extends Db
          header("location:login.php");
       }
       if (!empty($_POST)) {
-         $name = htmlspecialchars($_POST['name']);
-         $dob = htmlspecialchars($_POST['dob']);
-         $address = htmlspecialchars($_POST['address']);
-         $faculty = htmlspecialchars($_POST['faculty']);
-         $school = htmlspecialchars($_POST['school']);
-         $about = htmlspecialchars($_POST['about']);
-         $email = $_SESSION['email'];
-         $statement = $this->connect()->prepare('UPDATE students VALUES(name = :name, dob = :dob, address = :address, faculty = :faculty, school = :school, about = :about, WHERE email = :email');
-         $statement->bindValue(':name', $name);
-         $statement->bindValue(':dob', $dob);
-         $statement->bindValue(':address', $address);
-         $statement->bindValue(':faculty', $faculty);
-         $statement->bindValue(':school', $school);
-         $statement->bindValue(':about', $about);
-         $statement->bindValue(':email', $email);
-         $statement->execute();
+         try {
+            $name = htmlspecialchars($_POST['name']);
+            $dob = htmlspecialchars($_POST['dob']);
+            $address = htmlspecialchars($_POST['address']);
+            $faculty = htmlspecialchars($_POST['faculty']);
+            $school = htmlspecialchars($_POST['school']);
+            $about = htmlspecialchars($_POST['about']);
+            $date = date('Y-m-d');
+            $email = $_SESSION['email'];
+            $statement = $this->connect()->prepare('UPDATE students  SET name = :name, dob = :dob, address = :address, faculty = :faculty, school = :school, about = :about, date = :date WHERE email = :email');
+            $statement->bindValue(':name', $name);
+            $statement->bindValue(':dob', $dob);
+            $statement->bindValue(':address', $address);
+            $statement->bindValue(':faculty', $faculty);
+            $statement->bindValue(':school', $school);
+            $statement->bindValue(':about', $about);
+            $statement->bindValue(':date', $date);
+            $statement->bindValue(':email', $email);
+            $statement->execute();
+            $count = $statement->rowCount();
 
-      $sql = "SELECT * FROM students WHERE email = $email";
-        $statement = $this->connect()->prepare($sql);
-        $statement->execute();
+            if ($count == 1) {
+               header("location:home.php");
+            } else {
+               echo "Failed !";
+            }
+         } catch (PDOException $ex) {
+            echo $ex;
+         }
       }
+      // $sql = "SELECT * FROM students WHERE email = $email";
+      //   $statement = $this->connect()->prepare($sql);
+      //   $statement->execute();
+
    }
 
 
@@ -135,6 +148,55 @@ class Students extends Db
          unset($_SESSION['email']);
          session_destroy();
          header('location:login.php');
+      }
+   }
+
+   public function uploadPicture()
+   {
+
+      try {
+         if (!empty($_POST)) {
+            if ($_FILES["picture"]["error"] > 0) {
+               $msg = "File upload error";
+            } else {
+               $email = $_SESSION['email'];
+
+
+               $file_name = $_FILES["picture"]["name"];
+               $upload_dir = "./images/profile_pictures";
+               $tmp = explode('.', $file_name);
+               $extension = end($tmp);
+               $file_id = md5($email) . "." . $extension;
+
+               if ($extension == 'JPEG' || $extension == 'jpeg' || $extension == 'GIF' || $extension == 'gif' || $extension == 'PNG' || $extension == 'png' || $extension == 'JPG' || $extension == 'jpg') {
+                  $picture = $file_id;
+
+                  $statement = $this->connect()->prepare('UPDATE students SET picture = :picture WHERE email = :email');
+
+
+                  $statement->bindValue(':picture', $picture);
+                  $statement->bindValue(':email', $email);
+                  $statement->execute();
+                  $count = $statement->rowCount();
+
+                  if ($count == 1) {
+                     header("location:home.php");
+                  } else {
+                     echo "Failed !";
+                  }
+                  if ($statement) {
+                     move_uploaded_file($_FILES["picture"]["tmp_name"], $upload_dir . "/" . $file_id);
+                     $msg = "Successfully Registered";
+                  } else {
+                     $msg = "Account already exists";
+                  }
+               } else {
+                  $msg = "You are trying to upload illegal file please check the file extenstion";
+               }
+            }
+         }
+      } catch (PDOException $ex) {
+         echo $ex;
       }
    }
 }

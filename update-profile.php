@@ -1,9 +1,8 @@
-<?php 
+<?php
 require_once('template/header.php');
 
 $student = new Students();
-$data = $student->updateProfile();
-echo $data->name;
+$data = $student->profilePage();
 ?>
 
 
@@ -15,15 +14,15 @@ echo $data->name;
         <hr class="my-4">
 
 
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
+        <form method="post" action="./update.php" enctype="multipart/form-data">
           <div class="form-group">
             <label for="name">Full Name</label>
-            <input name="name" type="text" class="form-control" id="name" placeholder="Enter Full Name">
+            <input name="name" type="text" class="form-control" id="name" placeholder="Enter Full Name" value="<?php echo $data[0]->name ?>">
           </div>
 
           <div class="form-group">
             <label for="dob">Date of Birth</label>
-            <input name="dob" type="date" class="form-control" id="dob">
+            <input name="dob" type="date" class="form-control" id="dob" value="<?php echo $data[0]->dob ?>">
           </div>
 
           <div class="form-group">
@@ -33,41 +32,27 @@ echo $data->name;
 
           <div class="form-group">
             <label for="faculty">Faculty</label>
-            <input name="faculty" type="text" class="form-control" placeholder="Enter Faculty" id="faculty" value="">
+            <input name="faculty" type="text" class="form-control" placeholder="Enter Faculty" id="faculty" value="<?php echo $data[0]->faculty ?>">
           </div>
 
           <div class="form-group">
             <label for="school">School/University</label>
-            <input name="school" type="text" class="form-control" placeholder="Enter School or University" id="school">
+            <input name="school" type="text" class="form-control" placeholder="Enter School or University" id="school" value="<?php echo $data[0]->school ?>">
           </div>
 
           <div class="form-group">
             <label for="about">About me</label>
-            <textarea name="about" type="text" class="form-control" id="about" placeholder="Write about yourself"></textarea>
+            <textarea name="about" type="text" class="form-control" id="about" placeholder="Write about yourself"><?php echo $data[0]->about ?></textarea>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="picture">Profile Picture</label>
-            <input name="picture" type="file" class="form-control" id="picture">
-          </div>
+            <input name="picture" type="file" class="form-control" id="picture" value="<?php //echo $data[0]->picture ?>">
+          </div> -->
 
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-          </div>
 
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input name="password" type="password" class="form-control" id="password" placeholder="Enter Password">
-          </div>
 
-          <div class="form-group">
-            <label for="exampleInputPassword1">Confirm Password</label>
-            <input name="confirmpassword" type="password" class="form-control" id="confirmpassword" placeholder="Confirm Password">
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure, you want to register?'); window.location='login.php'">Register</button>
-          <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure, you want to register?'); window.location='login.php'">Register</button>
+          <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure, you want to register?'); window.location='update-profile.php'">Update</button>
         </form>
       </div>
     </div>

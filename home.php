@@ -23,7 +23,8 @@ $year = $dob->diff($today)->y;
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
-                                <a href="#">
+
+                                <a href="./change-picture.php">
                                     <img src="images/profile_pictures/<?php echo $a[0]->picture; ?>" class="rounded-circle">
                                 </a>
                             </div>
