@@ -3,7 +3,6 @@ include('template/header.php');
 
 $admin = new Admin();
 $students = $admin->getStudents();
-$del_students = $admin->deleteOne();
 
 
 ?>
@@ -49,7 +48,7 @@ $del_students = $admin->deleteOne();
           <?php echo $student->address; ?>
         </td>
         <td>
-        <?php echo $student->time." ".$student->date;?>
+          <?php echo $student->time . " " . $student->date; ?>
         </td>
         <td>
           <?php echo $student->school; ?>
@@ -58,10 +57,11 @@ $del_students = $admin->deleteOne();
           <?php echo $student->email; ?>
         </td>
         <td>
-        <img src="images/profile_pictures/<?php echo $student->picture; ?>" width="50" height="50">
+          <img src="images/profile_pictures/<?php echo $student->picture; ?>" width="50" height="50">
         </td>
         <td>
-        <a href="$delete_students?id=<?php echo $student->id;?>" onclick="return confirm('Are you sure?');" type="button" onclick="window.location='admin.php';" class="btn btn-sm btn-danger mr-4">Delete</a>
+          <form action='delete.php' method='post'><input type='hidden' name='id' value='<?php echo $student->id; ?>'><input class="btn btn-sm btn-danger mr-4" type='submit' name='delete' value='delete'>
+          </form>
         </td>
       </tr>
     <?php
