@@ -58,8 +58,9 @@ $year = $dob->diff($today)->y;
                         <div class="text-center">
                             <h3>
                                 <?php echo $a[0]->name ?>
-                                <span class="font-weight-light">, <?php echo $year ?></span>
+                                <span class="font-weight-light"></span>
                             </h3>
+                            <h5><span class="font-weight-light">Age: </span><?php echo $year ?></h5>
                             <div class="h5 font-weight-300">
                                 <i class="ni location_pin mr-2"></i><?php echo $a[0]->address ?>
                             </div>
@@ -71,7 +72,7 @@ $year = $dob->diff($today)->y;
                             </div>
                             <hr class="my-4">
                             <p><?php echo $a[0]->about ?></p>
-                            <a href="https://www.creative-tim.com/product/argon-dashboard" target="_blank">Show more</a>
+                            <a href="https://www.wikipedia.org" target="_blank">Show more</a>
                         </div>
                     </div>
                 </div>

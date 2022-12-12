@@ -122,10 +122,6 @@ class Students extends Db
             echo $ex;
          }
       }
-      // $sql = "SELECT * FROM students WHERE email = $email";
-      //   $statement = $this->connect()->prepare($sql);
-      //   $statement->execute();
-
    }
 
 
