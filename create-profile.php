@@ -1,9 +1,11 @@
 <?php
-require_once('template/header.php');
+$_title = 'Create Profile';
+require_once __DIR__.'/template/header.php';
 
 
-$stundents = new Students();
-$stundents->createProfile();
+
+$student = new Students();
+$msg = $student->createProfile();
 
 ?>
 <section class="pt-5">
@@ -15,7 +17,11 @@ $stundents->createProfile();
         <hr class="my-4">
 
 
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" onsubmit="return validatePassword();">
+        <?php  if(isset($msg))  
+                {  
+                     echo '<label class="text-danger">'.$msg.'</label>';  
+                }   ?>
           <div class="form-group">
             <label for="name">Full Name</label>
             <input name="name" type="text" class="form-control" id="name" placeholder="Enter Full Name">

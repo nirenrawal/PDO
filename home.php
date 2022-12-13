@@ -1,11 +1,10 @@
 <?php
-include('template/header.php');
+$_title = 'Home';
+require_once __DIR__.'/template/header.php';
+$student = new Students();
+$a = $student->profilePage();
 
-
-$stundents = new Students();
-$a = $stundents->profilePage();
-// print_r($a);
-
+//convert age from date
 $dob = new DateTime($a[0]->dob);
 $today   = new DateTime('today');
 $year = $dob->diff($today)->y;
@@ -33,8 +32,10 @@ $year = $dob->diff($today)->y;
                     <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                         <div class="d-flex justify-content-between">
                             <a type="button" onclick="window.location='update-profile.php';" class="btn btn-sm btn-info mr-4">Edit Profile</a>
-                            <a href="#" class="btn btn-sm btn-default float-right">Delete Profile</a>
-                        </div>
+                            <button type="button" class="btn btn-sm btn-danger float-right" data-toggle="modal" data-target="#exampleModalLong"> 
+                                Delete Profile
+                            </button>
+                            
                     </div>
                     <div class="card-body pt-0 pt-md-4">
                         <div class="row">
@@ -83,7 +84,34 @@ $year = $dob->diff($today)->y;
 
 
 
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Profile</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="form-group">
+            <label for="password">Enter password to delete your profile.</label>
+            <input name="password" type="password" class="form-control" id="password" placeholder="Enter Password">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <form action="del-p.php" method="POST">
+        <input type="button" class="btn btn-sm btn-secondary mr-4" data-dismiss="modal" value="Close">
+        <input type='hidden' name='password' value='<?php echo $student->id; ?>'>
+        <input class="btn btn-sm btn-danger mr-4" type='submit' name='delete-profile' value='Delete Profile'>
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger">Delete</button> -->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

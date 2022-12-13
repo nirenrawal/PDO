@@ -1,4 +1,5 @@
 <?php
+$_title = 'Update Profile';
 require_once('template/header.php');
 
 $student = new Students();

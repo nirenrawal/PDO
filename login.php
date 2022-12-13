@@ -1,4 +1,5 @@
 <?php
+$_title = 'Login';
 require_once('template/header.php');
 
 $admin = new Admin();

@@ -20,7 +20,8 @@ $session = $stundents->getSession();
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
   <link rel="stylesheet" href="styles/style.css">
-  <title>Register</title>
+  <title><?= $_title ?? 'Real Estate' ?></title>
+  
 </head>
 
 <body>
@@ -45,6 +46,9 @@ $session = $stundents->getSession();
 
           <?php if (!isset($session)) { ?>
             <a class="nav-item nav-link" href="./login.php">Login</a><?php } ?>
+          
+          <?php if (isset($session)) { ?>
+            <a class="nav-item nav-link" href="./change-password.php">Change Password</a><?php } ?>
 
 
         </div>
