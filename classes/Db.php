@@ -14,7 +14,6 @@ class Db
 
     public function connect()
     {
-
         try {
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

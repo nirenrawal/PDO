@@ -1,4 +1,5 @@
 <?php
+$_title = 'Admin Page';
 include('template/header.php');
 
 $admin = new Admin();
@@ -60,7 +61,9 @@ $students = $admin->getStudents();
           <img src="images/profile_pictures/<?php echo $student->picture; ?>" width="50" height="50">
         </td>
         <td>
-          <form action='delete.php' method='post'><input type='hidden' name='id' value='<?php echo $student->id; ?>'><input class="btn btn-sm btn-danger mr-4" type='submit' name='delete' value='delete'>
+          <form action='delete.php' method='post'>
+            <input type='hidden' name='id' value='<?php echo $student->id; ?>'>
+            <input class="btn btn-sm btn-danger mr-4" type='submit' name='delete' value='delete'>
           </form>
         </td>
       </tr>
@@ -72,5 +75,5 @@ $students = $admin->getStudents();
 </table>
 
 <?php
-require_once('template/footer.php');
+require_once __DIR__.'/template/footer.php';
 ?>
