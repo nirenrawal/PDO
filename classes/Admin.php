@@ -4,14 +4,18 @@ class Admin extends Db
 {
     public function getStudents()
     {
-        if (!isset($_SESSION['email'])) {
-            header("location:login.php");
+        try{
+            if (!isset($_SESSION['email'])) {
+                header("location:login.php");
+            }
+            $sql = "SELECT * FROM students WHERE user_type = '0' ORDER BY id DESC";
+            $statement = $this->connect()->prepare($sql);
+            $statement->execute();
+            $data = $statement->fetchAll();
+            return $data;
+        }catch(PDOException $ex){
+            echo $ex;
         }
-        $sql = "SELECT * FROM students WHERE user_type = '0' ORDER BY id DESC";
-        $statement = $this->connect()->prepare($sql);
-        $statement->execute();
-        $data = $statement->fetchAll();
-        return $data;
     }
 
 
@@ -50,8 +54,8 @@ class Admin extends Db
                     }
                 }
             }
-        } catch (PDOException $error) {
-            $message = $error->getMessage();
+        } catch (PDOException $ex) {
+            echo $ex;
         }
     }
 
@@ -81,8 +85,8 @@ class Admin extends Db
                     echo 'failed';
                 }
             }
-        } catch (PDOException $error) {
-            $message = $error->getMessage();
+        } catch (PDOException $ex) {
+            echo $ex();
         }
     }
 }

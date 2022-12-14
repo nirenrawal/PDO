@@ -5,7 +5,7 @@ $student = new Students();
 $a = $student->profilePage();
 // $d = $student->delProfile();
 
-//convert age from date
+//convert age from date of birth
 $dob = new DateTime($a[0]->dob);
 $today   = new DateTime('today');
 $year = $dob->diff($today)->y;
@@ -33,7 +33,7 @@ $year = $dob->diff($today)->y;
                     <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                         <div class="d-flex justify-content-between">
                             <a type="button" onclick="window.location='update-profile.php';" class="btn btn-sm btn-info mr-4">Edit Profile</a>
-                            <input type="submit" name='del' class="btn btn-sm btn-danger float-right" value="'Delete Profile'<?php //echo $student->delProfile() ?>" onclick="return confirm('Are you sure you want to delete your account permanently?');"/>
+                            <input type="submit" name='del' class="btn btn-sm btn-danger float-right" value="Delete Profile<?php //echo $student->delProfile() ?>" onclick="return confirm('Are you sure you want to delete your account permanently?');"/>
                             <!-- <button type="button" class="btn btn-sm btn-danger float-right" data-toggle="modal" data-target="#exampleModalLong"> 
                                 Delete Profile
                             </button> -->
@@ -118,4 +118,4 @@ $year = $dob->diff($today)->y;
 
 
 
-<?php include('template/footer.php'); ?>
+<?php require_once __DIR__.'/template/footer.php';?>

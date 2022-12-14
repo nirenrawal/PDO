@@ -46,13 +46,6 @@ $data = $student->profilePage();
             <textarea name="about" type="text" class="form-control" id="about" placeholder="Write about yourself"><?= htmlspecialchars($data[0]->about); ?></textarea>
           </div>
 
-          <!-- <div class="form-group">
-            <label for="picture">Profile Picture</label>
-            <input name="picture" type="file" class="form-control" id="picture" value="<?php //echo $data[0]->picture ?>">
-          </div> -->
-
-
-
           <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure, you want to Update your profile?'); window.location='update-profile.php'">Update</button>
         </form>
       </div>
