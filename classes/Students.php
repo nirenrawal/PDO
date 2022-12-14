@@ -5,7 +5,7 @@ class Students extends Db
    public function createProfile()
    {
       try {
-         if(isset($_SESSION['email'])){
+         if (isset($_SESSION['email'])) {
             header("Location:home.php");
          }
          if (!empty($_POST)) {
@@ -54,9 +54,7 @@ class Students extends Db
                   $statement->bindValue(':date', $date);
                   $statement->bindValue(':agent', $agent);
                   $statement->bindValue(':ip', $ip);
-
                   $statement->execute();
-
                   if ($statement) {
                      move_uploaded_file($_FILES["picture"]["tmp_name"], $upload_dir . "/" . $file_id);
                      $msg = "Successfully Registered";
@@ -76,57 +74,64 @@ class Students extends Db
    }
 
 
+
+
    public function profilePage()
    {
       if (!isset($_SESSION['email'])) {
          header('location:login.php');
       }
-
       $email = $_SESSION['email'];
-      // echo $email;
       $q = $this->connect()->prepare("SELECT * FROM students where email = :email");
       $q->bindValue(':email', $email);
       $q->execute();
       $data = $q->fetchAll();
-      // print_r($data);
       return $data;
    }
 
+
+
    public function updateProfile()
    {
-      if (!isset($_SESSION['email'])) {
-         header("location:login.php");
-      }
-      if (!empty($_POST)) {
-         try {
-            $name = htmlspecialchars($_POST['name']);
-            $dob = htmlspecialchars($_POST['dob']);
-            $address = htmlspecialchars($_POST['address']);
-            $faculty = htmlspecialchars($_POST['faculty']);
-            $school = htmlspecialchars($_POST['school']);
-            $about = htmlspecialchars($_POST['about']);
-            $date = date('Y-m-d');
-            $email = $_SESSION['email'];
-            $statement = $this->connect()->prepare('UPDATE students  SET name = :name, dob = :dob, address = :address, faculty = :faculty, school = :school, about = :about, date = :date WHERE email = :email');
-            $statement->bindValue(':name', $name);
-            $statement->bindValue(':dob', $dob);
-            $statement->bindValue(':address', $address);
-            $statement->bindValue(':faculty', $faculty);
-            $statement->bindValue(':school', $school);
-            $statement->bindValue(':about', $about);
-            $statement->bindValue(':date', $date);
-            $statement->bindValue(':email', $email);
-            $statement->execute();
-            $count = $statement->rowCount();
+      try {
+         if (isset($_SESSION['email'])) {
+            if (isset($_POST['name']) && isset($_POST['dob']) && isset($_POST['address']) && isset($_POST['faculty']) && isset($_POST['school']) && isset($_POST['about'])) {
+               function validate($data)
+               {
+                  $data = trim($data);
+                  $data = stripslashes($data);
+                  $data = htmlspecialchars($data);
+                  return $data;
+               }
+               $name = validate($_POST['name']);
+               $dob = validate($_POST['dob']);
+               $address = validate($_POST['address']);
+               $faculty = validate($_POST['faculty']);
+               $school = validate($_POST['school']);
+               $about = validate($_POST['about']);
+               $date = date('Y-m-d');
+               $email = $_SESSION['email'];
+               $statement = $this->connect()->prepare('UPDATE students  SET name = :name, dob = :dob, address = :address, faculty = :faculty, school = :school, about = :about, date = :date WHERE email = :email');
+               $statement->bindValue(':name', $name);
+               $statement->bindValue(':dob', $dob);
+               $statement->bindValue(':address', $address);
+               $statement->bindValue(':faculty', $faculty);
+               $statement->bindValue(':school', $school);
+               $statement->bindValue(':about', $about);
+               $statement->bindValue(':date', $date);
+               $statement->bindValue(':email', $email);
+               $statement->execute();
+               $count = $statement->rowCount();
 
-            if ($count == 1) {
-               header("location:home.php");
-            } else {
-               echo "Failed !";
+               if ($count == 1) {
+                  header("location:home.php");
+               } else {
+                  echo "Failed !";
+               }
             }
-         } catch (PDOException $ex) {
-            echo $ex;
          }
+      } catch (PDOException $ex) {
+         echo $ex;
       }
    }
 
@@ -162,7 +167,6 @@ class Students extends Db
             } else {
                $email = $_SESSION['email'];
 
-
                $file_name = $_FILES["picture"]["name"];
                $upload_dir = "./images/profile_pictures";
                $tmp = explode('.', $file_name);
@@ -180,6 +184,7 @@ class Students extends Db
                   $count = $statement->rowCount();
 
                   if ($count == 1) {
+                     echo 'success';
                      header("location:home.php");
                   } else {
                      echo "Failed !";
@@ -200,108 +205,160 @@ class Students extends Db
       }
    }
 
-   public function changePassowrd(){
+
+
+
+   public function changePassowrd()
+   {
       try {
-         if(isset($_SESSION['email'])){
-            if(isset($_POST['oldpassword']) && isset($_POST['newpassword']) && isset($_POST['confirmpassword'])){
-             function validate($data){
-                $data = trim($data);
-                $data = stripslashes($data);
-                $data = htmlspecialchars($data);
-                return $data;
-             }
-             $old = validate($_POST['oldpassword']);
-             $new = validate($_POST['newpassword']);
-             $confirm = validate(($_POST['confirmpassword']));
-    
-             if(empty($old)){
-                header("Location:change-password.php?error=Old Password is required.");
-                exit();
-             }elseif(empty($new)){
-                header("Location:change-password.php?error=New Password is required.");
-                exit();
-             }elseif($new !== $confirm){
-                header("Location:change-password.php?error=New Password and confirm password doesn't match.");
-                exit();
-             }else{
-                $old = sha1($old);
-                $new = sha1($new);
-                $email = $_SESSION['email'];
-    
-                $sql = "SELECT password FROM students WHERE email = :email and password = :password";
-            
-                   $query = $this->connect()->prepare($sql);
-                   $query->bindValue(':password', $old);
-                   $query->bindValue(':email', $email);
-                   $query->execute();
-                   $count = $query->rowCount();
-                   echo $count;
-                   if($count === 1){
-                      $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
-                      $pass = $this->connect()->prepare($connection);
-                      $pass->bindValue(':email', $email);
-                      $pass->bindValue(':newpassword', $new);
-                      $pass->execute();
-                      header("Location: change-password.php?success=Your password has been changed successfully");
-                      exit();
-                   }else {
-                      header("Location: change-password.php?error=Incorrect password");
-                   }
-             }
-    
-            }else{
-            //  header("Location: change-password.php");
-            //  exit();
+         if (isset($_SESSION['email'])) {
+            if (isset($_POST['oldpassword']) && isset($_POST['newpassword']) && isset($_POST['confirmpassword'])) {
+               function validate($data)
+               {
+                  $data = trim($data);
+                  $data = stripslashes($data);
+                  $data = htmlspecialchars($data);
+                  return $data;
+               }
+               $old = validate($_POST['oldpassword']);
+               $new = validate($_POST['newpassword']);
+               $confirm = validate(($_POST['confirmpassword']));
+
+               if (empty($old)) {
+                  header("Location:change-password.php?error=Old Password is required.");
+                  exit();
+               } elseif (empty($new)) {
+                  header("Location:change-password.php?error=New Password is required.");
+                  exit();
+               } elseif ($new !== $confirm) {
+                  header("Location:change-password.php?error=New Password and confirm password doesn't match.");
+                  exit();
+               } else {
+                  $email = $_SESSION['email'];
+                  $sql = "SELECT password FROM students WHERE email = :email";
+                  $query = $this->connect()->prepare($sql);
+                  $query->bindValue(':email', $email);
+                  $query->execute();
+                  $count = $query->rowCount();
+                  if ($count == 1) {
+                    $result = $query->fetch();
+                    if (password_verify($old, $result->password)){
+                        if($new == $confirm){
+                            $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
+                            $hash = password_hash($confirm, PASSWORD_DEFAULT);
+                            $pass = $this->connect()->prepare($connection);
+                            $pass->bindValue(':email', $email);
+                            $pass->bindValue(':newpassword', $hash);
+                            $pass->execute();
+                            header("Location: change-password.php?success=Your password has been changed successfully");
+                            exit();
+                        }
+                    }else {
+                        header("Location: change-password.php?error=Incorrect password");
+                     }
+                     
+                  } 
+               }
+            } else {
             }
-             }else{
-                header("Location: home.php");
-                exit();
-             }
-      } catch (PDOException $ex){
+         } else {
+            header("Location: home.php");
+            exit();
+         }
+      } catch (PDOException $ex) {
          echo $ex;
-      }   
+      }
+      // try {
+      //    if (isset($_SESSION['email'])) {
+      //       if (isset($_POST['oldpassword']) && isset($_POST['newpassword']) && isset($_POST['confirmpassword'])) {
+      //          function validate($data)
+      //          {
+      //             $data = trim($data);
+      //             $data = stripslashes($data);
+      //             $data = htmlspecialchars($data);
+      //             return $data;
+      //          }
+      //          $old = validate($_POST['oldpassword']);
+      //          $new = validate($_POST['newpassword']);
+      //          $confirm = validate(($_POST['confirmpassword']));
+
+      //          if (empty($old)) {
+      //             header("Location:change-password.php?error=Old Password is required.");
+      //             exit();
+      //          } elseif (empty($new)) {
+      //             header("Location:change-password.php?error=New Password is required.");
+      //             exit();
+      //          } elseif ($new !== $confirm) {
+      //             header("Location:change-password.php?error=New Password and confirm password doesn't match.");
+      //             exit();
+      //          } else {
+      //             $old = password_hash($old, PASSWORD_DEFAULT);
+      //             $new = password_hash($new, PASSWORD_DEFAULT);
+      //             $email = $_SESSION['email'];
+
+      //             $sql = "SELECT password FROM students WHERE email = :email and password = :password";
+
+      //             $query = $this->connect()->prepare($sql);
+      //             $query->bindValue(':password', $old);
+      //             $query->bindValue(':email', $email);
+      //             $query->execute();
+      //             $count = $query->rowCount();
+      //             echo $count;
+      //             if ($count === 1) {
+      //                $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
+      //                $pass = $this->connect()->prepare($connection);
+      //                $pass->bindValue(':email', $email);
+      //                $pass->bindValue(':newpassword', $new);
+      //                $pass->execute();
+      //                header("Location: change-password.php?success=Your password has been changed successfully");
+      //                exit();
+      //             } else {
+      //                header("Location: change-password.php?error=Incorrect password");
+      //             }
+      //          }
+      //       // } else {
+      //       //    //  header("Location: change-password.php");
+      //       //    //  exit();
+      //       }
+      //    } else {
+      //       header("Location: home.php");
+      //       exit();
+      //    }
+      // } catch (PDOException $ex) {
+      //    echo $ex;
+      // }
    }
 
+
+   public function delProfile()
+   {
+      if (!isset($_SESSION['email'])) {
+         header("location:login.php");
+      }
+      try {
+        
+         $email = $_SESSION['email'];
+         $sql = 'DELETE FROM students WHERE email = :email';
+         $stmt = $this->connect()->prepare($sql);
+         $stmt->bindValue(':email', $email);
+         $stmt->execute();
+         // $count = $stmt->rowCount();
+         if ($stmt->execute()) {
+            header("Location:logout.php");
+         }else{
+            header("Location:home.php");
+         }
+         // $s = mysqli_fetch_array(mysqli_query($al, "SELECT * FROM students WHERE email = '" . $_SESSION['email'] . "' "));
+         // if (!empty($_POST)) {
+         //    if (sha1($_POST['p']) == $s_['password']) {
+         //       $sql = mysqli_query($al, "DELETE FROM students WHERE email = '" . $_SESSION['email'] . "'");
+         //       if ($sql) {
+         //             header("location:logout.php");
+         //       }
+         //    }
+
+      } catch (PDOException $ex) {
+         echo $ex;
+      }
+   }
 }
-
-
-   
-
-//    public function deleteProfile()
-//    {
-//       if (!isset($_SESSION['email'])) {
-//          header('location:login.php');
-//       }
-//       try {
-//          if (isset($_POST["delete-profile"])) {
-//             $email = $_SESSION['email'];
-//             $sql = 'SELECT * FROM students WHERE email = :email';
-//             $stmt = $this->connect()->prepare($sql);
-//             $stmt->bindValue(':email', $email);
-//             $stmt->execute();
-//             $data = $stmt->fetchAll();
-//             return $data;
-//             if (!empty($_POST)) {
-//                if (sha1($_POST['password']) == $data[0]->password) {
-//                   $sql = 'DELETE FROM students 
-//                     WHERE email = :email';
-//                   $stmt = $this->connect()->prepare($sql);
-//                   $stmt->bindValue(':email', $email);
-//                   $stmt->execute();
-//                   $count = $stmt->rowCount();
-
-//                   echo $data[0]->password;
-
-//                   if ($count == 1) {
-//                      header('location:create-profile.php');
-//                   } else {
-//                      echo 'failed';
-//                   }
-//                }
-//             }
-//          }
-//       } catch (PDOException $error) {
-//          $message = $error->getMessage();
-//       }
-//    }
-// }

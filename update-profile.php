@@ -1,6 +1,6 @@
 <?php
 $_title = 'Update Profile';
-require_once('template/header.php');
+require_once __DIR__.'/template/header.php';
 
 $student = new Students();
 $data = $student->profilePage();
@@ -14,8 +14,7 @@ $data = $student->profilePage();
         <h1 class="display-4 text-center">Update Your Profile</h1>
         <hr class="my-4">
 
-
-        <form method="post" action="./update.php" enctype="multipart/form-data">
+        <form method="post" action="<?php $student->updateProfile() ?>" enctype="multipart/form-data">
           <div class="form-group">
             <label for="name">Full Name</label>
             <input name="name" type="text" class="form-control" id="name" placeholder="Enter Full Name" value="<?= htmlspecialchars($data[0]->name); ?>">
@@ -46,13 +45,6 @@ $data = $student->profilePage();
             <textarea name="about" type="text" class="form-control" id="about" placeholder="Write about yourself"><?= htmlspecialchars($data[0]->about); ?></textarea>
           </div>
 
-          <!-- <div class="form-group">
-            <label for="picture">Profile Picture</label>
-            <input name="picture" type="file" class="form-control" id="picture" value="<?php //echo $data[0]->picture ?>">
-          </div> -->
-
-
-
           <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure, you want to Update your profile?'); window.location='update-profile.php'">Update</button>
         </form>
       </div>
@@ -62,4 +54,4 @@ $data = $student->profilePage();
 
 
 
-<?php require_once('template/footer.php'); ?>
+<?php require_once __DIR__.'/template/footer.php'; ?>

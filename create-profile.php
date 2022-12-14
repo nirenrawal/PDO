@@ -2,12 +2,11 @@
 $_title = 'Create Profile';
 require_once __DIR__.'/template/header.php';
 
-
-
 $student = new Students();
 $msg = $student->createProfile();
-
 ?>
+
+
 <section class="pt-5">
   <div class="row">
     <div class="container">
@@ -79,4 +78,4 @@ $msg = $student->createProfile();
   </div>
 </section>
 
-<?php require_once('template/footer.php'); ?>
+<?php require_once __DIR__.'/template/footer.php'; ?>
