@@ -2,9 +2,8 @@
 $_title = 'Change Password';
 require_once __DIR__ . '/template/header.php';
 $student = new Students();
-// $student->changePassowrd();
-
 ?>
+
 <section class="pt-5">
   <div class="row">
     <div class="container">
@@ -12,7 +11,7 @@ $student = new Students();
         <h1 class="display-4 text-center">Change Password</h1>
         <hr class="my-4">
 
-        <form method="POST" action="<?php $student->changePassowrd(); ?>">
+        <form method="POST" action="<?php $student->changePassowrd() ?>">
 
           <?php if (isset($_GET['error'])) { ?>
             <p class="error"><?php echo $_GET['error']; ?></p>

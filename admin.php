@@ -61,7 +61,7 @@ $students = $admin->getStudents();
           <img src="images/profile_pictures/<?php echo $student->picture; ?>" width="50" height="50">
         </td>
         <td>
-          <form action='delete.php' method='post'>
+          <form action='<?php $admin->delete()?>' method='post'>
             <input type='hidden' name='id' value='<?php echo $student->id; ?>'>
             <input class="btn btn-sm btn-danger mr-4" type='submit' name='delete' value='delete'>
           </form>

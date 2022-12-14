@@ -234,33 +234,32 @@ class Students extends Db
                   header("Location:change-password.php?error=New Password and confirm password doesn't match.");
                   exit();
                } else {
-                  $old = password_hash($old, PASSWORD_DEFAULT);
-                  $new = password_hash($new, PASSWORD_DEFAULT);
                   $email = $_SESSION['email'];
-
-                  $sql = "SELECT password FROM students WHERE email = :email and password = :password";
-
+                  $sql = "SELECT password FROM students WHERE email = :email";
                   $query = $this->connect()->prepare($sql);
-                  $query->bindValue(':password', $old);
                   $query->bindValue(':email', $email);
                   $query->execute();
                   $count = $query->rowCount();
-                  echo $count;
-                  if ($count === 1) {
-                     $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
-                     $pass = $this->connect()->prepare($connection);
-                     $pass->bindValue(':email', $email);
-                     $pass->bindValue(':newpassword', $new);
-                     $pass->execute();
-                     header("Location: change-password.php?success=Your password has been changed successfully");
-                     exit();
-                  } else {
-                     header("Location: change-password.php?error=Incorrect password");
-                  }
+                  if ($count == 1) {
+                    $result = $query->fetch();
+                    if (password_verify($old, $result->password)){
+                        if($new == $confirm){
+                            $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
+                            $hash = password_hash($confirm, PASSWORD_DEFAULT);
+                            $pass = $this->connect()->prepare($connection);
+                            $pass->bindValue(':email', $email);
+                            $pass->bindValue(':newpassword', $hash);
+                            $pass->execute();
+                            header("Location: change-password.php?success=Your password has been changed successfully");
+                            exit();
+                        }
+                    }else {
+                        header("Location: change-password.php?error=Incorrect password");
+                     }
+                     
+                  } 
                }
-            // } else {
-            //    //  header("Location: change-password.php");
-            //    //  exit();
+            } else {
             }
          } else {
             header("Location: home.php");
@@ -269,6 +268,65 @@ class Students extends Db
       } catch (PDOException $ex) {
          echo $ex;
       }
+      // try {
+      //    if (isset($_SESSION['email'])) {
+      //       if (isset($_POST['oldpassword']) && isset($_POST['newpassword']) && isset($_POST['confirmpassword'])) {
+      //          function validate($data)
+      //          {
+      //             $data = trim($data);
+      //             $data = stripslashes($data);
+      //             $data = htmlspecialchars($data);
+      //             return $data;
+      //          }
+      //          $old = validate($_POST['oldpassword']);
+      //          $new = validate($_POST['newpassword']);
+      //          $confirm = validate(($_POST['confirmpassword']));
+
+      //          if (empty($old)) {
+      //             header("Location:change-password.php?error=Old Password is required.");
+      //             exit();
+      //          } elseif (empty($new)) {
+      //             header("Location:change-password.php?error=New Password is required.");
+      //             exit();
+      //          } elseif ($new !== $confirm) {
+      //             header("Location:change-password.php?error=New Password and confirm password doesn't match.");
+      //             exit();
+      //          } else {
+      //             $old = password_hash($old, PASSWORD_DEFAULT);
+      //             $new = password_hash($new, PASSWORD_DEFAULT);
+      //             $email = $_SESSION['email'];
+
+      //             $sql = "SELECT password FROM students WHERE email = :email and password = :password";
+
+      //             $query = $this->connect()->prepare($sql);
+      //             $query->bindValue(':password', $old);
+      //             $query->bindValue(':email', $email);
+      //             $query->execute();
+      //             $count = $query->rowCount();
+      //             echo $count;
+      //             if ($count === 1) {
+      //                $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
+      //                $pass = $this->connect()->prepare($connection);
+      //                $pass->bindValue(':email', $email);
+      //                $pass->bindValue(':newpassword', $new);
+      //                $pass->execute();
+      //                header("Location: change-password.php?success=Your password has been changed successfully");
+      //                exit();
+      //             } else {
+      //                header("Location: change-password.php?error=Incorrect password");
+      //             }
+      //          }
+      //       // } else {
+      //       //    //  header("Location: change-password.php");
+      //       //    //  exit();
+      //       }
+      //    } else {
+      //       header("Location: home.php");
+      //       exit();
+      //    }
+      // } catch (PDOException $ex) {
+      //    echo $ex;
+      // }
    }
 
 
