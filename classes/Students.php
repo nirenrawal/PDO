@@ -1,6 +1,6 @@
 <?php
 
-class Students extends Db
+class Students extends Db implements Person
 {
    public function createProfile()
    {
@@ -98,8 +98,8 @@ class Students extends Db
             if (isset($_POST['name']) && isset($_POST['dob']) && isset($_POST['address']) && isset($_POST['faculty']) && isset($_POST['school']) && isset($_POST['about'])) {
                function validate($data)
                {
-                  $data = trim($data);
-                  $data = stripslashes($data);
+                  // $data = trim($data);
+                  // $data = stripslashes($data);
                   $data = htmlspecialchars($data);
                   return $data;
                }
@@ -180,20 +180,16 @@ class Students extends Db
 
                   $statement->bindValue(':picture', $picture);
                   $statement->bindValue(':email', $email);
-                  $statement->execute();
-                  $count = $statement->rowCount();
+                  //$statement->execute();
+                  // $count = $statement->rowCount();
 
-                  if ($count == 1) {
-                     echo 'success';
+                  if ($statement->execute()) {
+                     move_uploaded_file($_FILES["picture"]["tmp_name"], $upload_dir . "/" . $file_id);
+                     // $msg = "Successfully Registered";
+                     // echo 'success';
                      header("location:home.php");
                   } else {
                      echo "Failed !";
-                  }
-                  if ($statement) {
-                     move_uploaded_file($_FILES["picture"]["tmp_name"], $upload_dir . "/" . $file_id);
-                     $msg = "Successfully Registered";
-                  } else {
-                     $msg = "Account already exists";
                   }
                } else {
                   $msg = "You are trying to upload illegal file please check the file extenstion";
@@ -204,7 +200,6 @@ class Students extends Db
          echo $ex;
       }
    }
-
 
 
 
@@ -241,23 +236,22 @@ class Students extends Db
                   $query->execute();
                   $count = $query->rowCount();
                   if ($count == 1) {
-                    $result = $query->fetch();
-                    if (password_verify($old, $result->password)){
-                        if($new == $confirm){
-                            $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
-                            $hash = password_hash($confirm, PASSWORD_DEFAULT);
-                            $pass = $this->connect()->prepare($connection);
-                            $pass->bindValue(':email', $email);
-                            $pass->bindValue(':newpassword', $hash);
-                            $pass->execute();
-                            header("Location: change-password.php?success=Your password has been changed successfully");
-                            exit();
+                     $result = $query->fetch();
+                     if (password_verify($old, $result->password)) {
+                        if ($new == $confirm) {
+                           $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
+                           $hash = password_hash($confirm, PASSWORD_DEFAULT);
+                           $pass = $this->connect()->prepare($connection);
+                           $pass->bindValue(':email', $email);
+                           $pass->bindValue(':newpassword', $hash);
+                           $pass->execute();
+                           header("Location: change-password.php?success=Your password has been changed successfully");
+                           exit();
                         }
-                    }else {
+                     } else {
                         header("Location: change-password.php?error=Incorrect password");
                      }
-                     
-                  } 
+                  }
                }
             } else {
             }
@@ -268,95 +262,28 @@ class Students extends Db
       } catch (PDOException $ex) {
          echo $ex;
       }
-      // try {
-      //    if (isset($_SESSION['email'])) {
-      //       if (isset($_POST['oldpassword']) && isset($_POST['newpassword']) && isset($_POST['confirmpassword'])) {
-      //          function validate($data)
-      //          {
-      //             $data = trim($data);
-      //             $data = stripslashes($data);
-      //             $data = htmlspecialchars($data);
-      //             return $data;
-      //          }
-      //          $old = validate($_POST['oldpassword']);
-      //          $new = validate($_POST['newpassword']);
-      //          $confirm = validate(($_POST['confirmpassword']));
-
-      //          if (empty($old)) {
-      //             header("Location:change-password.php?error=Old Password is required.");
-      //             exit();
-      //          } elseif (empty($new)) {
-      //             header("Location:change-password.php?error=New Password is required.");
-      //             exit();
-      //          } elseif ($new !== $confirm) {
-      //             header("Location:change-password.php?error=New Password and confirm password doesn't match.");
-      //             exit();
-      //          } else {
-      //             $old = password_hash($old, PASSWORD_DEFAULT);
-      //             $new = password_hash($new, PASSWORD_DEFAULT);
-      //             $email = $_SESSION['email'];
-
-      //             $sql = "SELECT password FROM students WHERE email = :email and password = :password";
-
-      //             $query = $this->connect()->prepare($sql);
-      //             $query->bindValue(':password', $old);
-      //             $query->bindValue(':email', $email);
-      //             $query->execute();
-      //             $count = $query->rowCount();
-      //             echo $count;
-      //             if ($count === 1) {
-      //                $connection = "UPDATE students SET password = :newpassword WHERE email = :email";
-      //                $pass = $this->connect()->prepare($connection);
-      //                $pass->bindValue(':email', $email);
-      //                $pass->bindValue(':newpassword', $new);
-      //                $pass->execute();
-      //                header("Location: change-password.php?success=Your password has been changed successfully");
-      //                exit();
-      //             } else {
-      //                header("Location: change-password.php?error=Incorrect password");
-      //             }
-      //          }
-      //       // } else {
-      //       //    //  header("Location: change-password.php");
-      //       //    //  exit();
-      //       }
-      //    } else {
-      //       header("Location: home.php");
-      //       exit();
-      //    }
-      // } catch (PDOException $ex) {
-      //    echo $ex;
-      // }
    }
 
 
-   public function delProfile()
+   public function delete()
    {
       if (!isset($_SESSION['email'])) {
          header("location:login.php");
       }
       try {
-        
-         $email = $_SESSION['email'];
-         $sql = 'DELETE FROM students WHERE email = :email';
-         $stmt = $this->connect()->prepare($sql);
-         $stmt->bindValue(':email', $email);
-         $stmt->execute();
-         // $count = $stmt->rowCount();
-         if ($stmt->execute()) {
-            header("Location:logout.php");
-         }else{
-            header("Location:home.php");
+         if (isset($_POST["delete"])) {
+            $id = $_POST['id'];
+            $sql = 'DELETE FROM students WHERE id = :id';
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+            $count = $stmt->rowCount();
+            if ($count == 1) {
+               header("Location:logout.php");
+            } else {
+               header("Location:home.php");
+            }
          }
-         // $s = mysqli_fetch_array(mysqli_query($al, "SELECT * FROM students WHERE email = '" . $_SESSION['email'] . "' "));
-         // if (!empty($_POST)) {
-         //    if (sha1($_POST['p']) == $s_['password']) {
-         //       $sql = mysqli_query($al, "DELETE FROM students WHERE email = '" . $_SESSION['email'] . "'");
-         //       if ($sql) {
-         //             header("location:logout.php");
-         //       }
-         //    }
-
       } catch (PDOException $ex) {
          echo $ex;
       }

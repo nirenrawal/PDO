@@ -1,10 +1,5 @@
 <?php
-/*spl_autoload_register()
-Defination
-Calls a function when a class is loaded.
-in other words, it says to the computer ....
-(when you try to load a class) 
-hey computer please do this-> **/
+
 session_start();
 class Db
 {

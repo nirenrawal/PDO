@@ -1,6 +1,6 @@
 <?php
 
-class Admin extends Db
+class Admin extends Db implements Person
 {
     public function getStudents()
     {
