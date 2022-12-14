@@ -3,6 +3,7 @@ $_title = 'Home';
 require_once __DIR__.'/template/header.php';
 $student = new Students();
 $a = $student->profilePage();
+// $d = $student->delProfile();
 
 //convert age from date
 $dob = new DateTime($a[0]->dob);
@@ -32,9 +33,10 @@ $year = $dob->diff($today)->y;
                     <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                         <div class="d-flex justify-content-between">
                             <a type="button" onclick="window.location='update-profile.php';" class="btn btn-sm btn-info mr-4">Edit Profile</a>
-                            <button type="button" class="btn btn-sm btn-danger float-right" data-toggle="modal" data-target="#exampleModalLong"> 
+                            <input type="submit" name='del' class="btn btn-sm btn-danger float-right" value="'Delete Profile'<?php //echo $student->delProfile() ?>" onclick="return confirm('Are you sure you want to delete your account permanently?');"/>
+                            <!-- <button type="button" class="btn btn-sm btn-danger float-right" data-toggle="modal" data-target="#exampleModalLong"> 
                                 Delete Profile
-                            </button>
+                            </button> -->
                             
                     </div>
                     <div class="card-body pt-0 pt-md-4">
@@ -42,15 +44,15 @@ $year = $dob->diff($today)->y;
                             <div class="col">
                                 <div class="card-profile-stats d-flex justify-content-center mt-md-5">
                                     <div>
-                                        <span class="heading">22</span>
+                                        <span class="heading"><?php echo(rand(1,5000));?></span>
                                         <span class="description">Friends</span>
                                     </div>
                                     <div>
-                                        <span class="heading">10</span>
+                                        <span class="heading"><?php echo(rand(1,50));?></span>
                                         <span class="description">Photos</span>
                                     </div>
                                     <div>
-                                        <span class="heading">89</span>
+                                        <span class="heading"><?php echo(rand(1,200));?></span>
                                         <span class="description">Comments</span>
                                     </div>
                                 </div>
