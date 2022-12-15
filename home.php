@@ -44,7 +44,7 @@ $year = $dob->diff($today)->y;
                                 <div class="col">
                                     <div class="card-profile-stats d-flex justify-content-center mt-md-5">
                                         <div>
-                                            <span class="heading"><?php echo (rand(1, 5000)); ?></span>
+                                            <span class="heading"><?php echo (rand(1, 200)); ?></span>
                                             <span class="description">Friends</span>
                                         </div>
                                         <div>

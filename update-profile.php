@@ -4,6 +4,8 @@ require_once __DIR__.'/template/header.php';
 
 $student = new Students();
 $data = $student->profilePage();
+
+
 ?>
 
 
@@ -13,8 +15,9 @@ $data = $student->profilePage();
       <div class="jumbotron">
         <h1 class="display-4 text-center">Update Your Profile</h1>
         <hr class="my-4">
-
+        <?php  if(isset($msg)){echo '<label class="text-danger">'.$msg.'</label>';}?>
         <form method="post" action="<?php $student->updateProfile() ?>" enctype="multipart/form-data">
+       
           <div class="form-group">
             <label for="name">Full Name</label>
             <input name="name" type="text" class="form-control" id="name" placeholder="Enter Full Name" value="<?= htmlspecialchars($data[0]->name); ?>">
