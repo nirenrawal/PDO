@@ -5,11 +5,6 @@ require_once('template/header.php');
 $admin = new Admin();
 $msg = $admin->login();
 
-
-// if (isset($_SESSION["email"])) {
-//   header('location:home.php');
-// }
-
 ?>
 <section class="pt-5">
   <div class="row">
@@ -18,8 +13,6 @@ $msg = $admin->login();
         <h1 class="display-4 text-center">Log In</h1>
         <p class="lead">Please Enter your email address and password.</p>
         <hr class="my-4">
-
-
 
         <form method="post">
           <?php  if(isset($msg))  

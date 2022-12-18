@@ -4,8 +4,6 @@ include('template/header.php');
 
 $admin = new Admin();
 $students = $admin->getStudents();
-
-
 ?>
 
 <h1 class="text-center pt-3 pb-2">List of the Users</h1>
@@ -28,8 +26,6 @@ $students = $admin->getStudents();
     <?php
     $number = 1;
     foreach ($students as $student) {
-
-
     ?>
       <tr>
         <th scope="row">
@@ -63,7 +59,7 @@ $students = $admin->getStudents();
         <td>
           <form action='<?php $admin->delete()?>' method='post'>
             <input type='hidden' name='id' value='<?php echo $student->id; ?>'>
-            <input class="btn btn-sm btn-danger mr-4" type='submit' name='delete' value='delete'>
+            <input class="btn btn-sm btn-danger mr-4" type='submit' name='delete' value='Delete' onclick="return confirm('Are you sure, you want to delete?');">
           </form>
         </td>
       </tr>

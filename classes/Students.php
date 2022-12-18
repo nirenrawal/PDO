@@ -1,9 +1,11 @@
 <?php
 
-class Students extends Db implements Person
+class Students extends Db 
 {
    public function createProfile()
    {
+      $msg = '';
+      $regex = '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
       try {
          if (isset($_SESSION['email'])) {
             header("Location:home.php");
@@ -11,6 +13,7 @@ class Students extends Db implements Person
          if (!empty($_POST)) {
             if ($_FILES["picture"]["error"] > 0) {
                $msg = "File upload error";
+               return $msg;
             } else {
                $file_name = $_FILES["picture"]["name"];
                $upload_dir = "./images/profile_pictures";
@@ -19,6 +22,7 @@ class Students extends Db implements Person
                $file_id = md5($_POST['email']) . "." . $extension;
 
                if ($extension == 'JPEG' || $extension == 'jpeg' || $extension == 'GIF' || $extension == 'gif' || $extension == 'PNG' || $extension == 'png' || $extension == 'JPG' || $extension == 'jpg') {
+                  // if(isset($_POST['submit'])){
                   $user_type = '0';
                   $hash_key = sha1(microtime());
                   $name = $_POST['name'];
@@ -35,6 +39,30 @@ class Students extends Db implements Person
                   $date = date('Y-m-d');
                   $agent = $_SERVER['HTTP_USER_AGENT'];
                   $ip = $_SERVER['REMOTE_ADDR'];
+
+                  if(strlen($name) <=2){
+                     $msg_name= 'Full name must be minimum 2 characters long.';
+                     return $msg_name;
+                  }elseif(strlen($address) <= 8){
+                     $msg= 'Address must be minimum 8 characters long.';
+                     return $msg;
+                  }elseif(!preg_match($regex, $email)){
+                     $msg="Please enter a valid email address";
+                     return $msg;
+                  }elseif(strlen($faculty) <=2){
+                     $msg= 'Faculty must be minimum 2 characters long.';
+                     return $msg;
+                  }elseif(strlen($school) <=2){
+                     $msg= 'School must be minimum 2 characters long.';
+                     return $msg;
+                  }elseif(strlen($school) <=1){
+                     $msg= "'About me' cannot be empty.";
+                     return $msg;
+                  }elseif(strlen($password) <= 6){
+                     $msg= 'Password must be 6 characters long';
+                     return $msg;
+                  }
+                  else{
 
                   $statement = $this->connect()->prepare('INSERT INTO students VALUES(:id, :user_type, :hash_key, :name, :dob, :address, :faculty, :school, :about, :email, :password, :picture, :time, :date, :agent, :ip)');
 
@@ -63,8 +91,10 @@ class Students extends Db implements Person
                      $msg = "Account already exists";
                      return $msg;
                   }
+               }
                } else {
                   $msg = "You are trying to upload illegal file please check the file extenstion";
+                  return $msg;
                }
             }
          }
@@ -73,7 +103,7 @@ class Students extends Db implements Person
       }
    }
 
-
+//************************************************************************************************/
 
 
    public function profilePage()
@@ -90,7 +120,7 @@ class Students extends Db implements Person
    }
 
 
-
+//************************************************************************************************/
    public function updateProfile()
    {
       try {
@@ -98,8 +128,8 @@ class Students extends Db implements Person
             if (isset($_POST['name']) && isset($_POST['dob']) && isset($_POST['address']) && isset($_POST['faculty']) && isset($_POST['school']) && isset($_POST['about'])) {
                function validate($data)
                {
-                  // $data = trim($data);
-                  // $data = stripslashes($data);
+                  $data = trim($data);
+                  $data = stripslashes($data);
                   $data = htmlspecialchars($data);
                   return $data;
                }
@@ -135,7 +165,7 @@ class Students extends Db implements Person
       }
    }
 
-
+//************************************************************************************************/
 
    public function getSession()
    {
@@ -146,7 +176,7 @@ class Students extends Db implements Person
    }
 
 
-
+//************************************************************************************************/
 
    public function deleteSession()
    {
@@ -157,6 +187,9 @@ class Students extends Db implements Person
          header('location:login.php');
       }
    }
+
+
+//************************************************************************************************/
 
    public function uploadPicture()
    {
@@ -180,19 +213,15 @@ class Students extends Db implements Person
 
                   $statement->bindValue(':picture', $picture);
                   $statement->bindValue(':email', $email);
-                  //$statement->execute();
-                  // $count = $statement->rowCount();
 
                   if ($statement->execute()) {
                      move_uploaded_file($_FILES["picture"]["tmp_name"], $upload_dir . "/" . $file_id);
-                     // $msg = "Successfully Registered";
-                     // echo 'success';
                      header("location:home.php");
                   } else {
                      echo "Failed !";
                   }
                } else {
-                  $msg = "You are trying to upload illegal file please check the file extenstion";
+                  echo "You are trying to upload illegal file please check the file extenstion";
                }
             }
          }
@@ -201,7 +230,7 @@ class Students extends Db implements Person
       }
    }
 
-
+//************************************************************************************************/
 
    public function changePassowrd()
    {
@@ -225,7 +254,10 @@ class Students extends Db implements Person
                } elseif (empty($new)) {
                   header("Location:change-password.php?error=New Password is required.");
                   exit();
-               } elseif ($new !== $confirm) {
+               } elseif(!empty($new) && strlen($new) <= 6){
+                  header("Location:change-password.php?error=Password must be 6 characters long.");
+                  exit();
+               }elseif ($new !== $confirm) {
                   header("Location:change-password.php?error=New Password and confirm password doesn't match.");
                   exit();
                } else {
@@ -263,7 +295,7 @@ class Students extends Db implements Person
          echo $ex;
       }
    }
-
+//************************************************************************************************/
 
    public function delete()
    {

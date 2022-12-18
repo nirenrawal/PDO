@@ -1,6 +1,6 @@
 <?php
 
-class Admin extends Db implements Person
+class Admin extends Db 
 {
     public function getStudents()
     {
@@ -18,6 +18,7 @@ class Admin extends Db implements Person
         }
     }
 
+//************************************************************************************************/
 
     public function login()
     {
@@ -33,11 +34,8 @@ class Admin extends Db implements Person
                     $query = "SELECT * FROM students WHERE email = :email";
                     $statement = $this->connect()->prepare($query);
                     $statement->bindValue(':email', $email);
-                    // $statement->bindValue(':password', $password);
                     $statement->execute();
-
                     $data = $statement->fetchAll();
-                    // $count = $statement->rowCount();
                     if (isset($data[0])){
                         if(password_verify($password, $data[0]->password)){
                             $_SESSION["email"] = $_POST["email"];
@@ -59,7 +57,7 @@ class Admin extends Db implements Person
         }
     }
 
-
+//************************************************************************************************/
 
     public function delete()
     {
