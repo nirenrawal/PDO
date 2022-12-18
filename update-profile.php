@@ -4,8 +4,6 @@ require_once __DIR__.'/template/header.php';
 
 $student = new Students();
 $data = $student->profilePage();
-
-
 ?>
 
 
@@ -54,7 +52,6 @@ $data = $student->profilePage();
     </div>
   </div>
 </section>
-
 
 
 <?php require_once __DIR__.'/template/footer.php'; ?>

@@ -2,7 +2,7 @@
 include "./includes/autoload.php";
 $stundents = new Students();
 $session = $stundents->getSession();
-// echo $session;
+
 ?>
 
 <!DOCTYPE html>

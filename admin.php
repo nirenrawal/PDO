@@ -26,8 +26,6 @@ $students = $admin->getStudents();
     <?php
     $number = 1;
     foreach ($students as $student) {
-
-
     ?>
       <tr>
         <th scope="row">

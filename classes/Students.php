@@ -1,6 +1,6 @@
 <?php
 
-class Students extends Db implements Person
+class Students extends Db 
 {
    public function createProfile()
    {
@@ -13,6 +13,7 @@ class Students extends Db implements Person
          if (!empty($_POST)) {
             if ($_FILES["picture"]["error"] > 0) {
                $msg = "File upload error";
+               return $msg;
             } else {
                $file_name = $_FILES["picture"]["name"];
                $upload_dir = "./images/profile_pictures";
@@ -93,6 +94,7 @@ class Students extends Db implements Person
                }
                } else {
                   $msg = "You are trying to upload illegal file please check the file extenstion";
+                  return $msg;
                }
             }
          }
@@ -101,7 +103,7 @@ class Students extends Db implements Person
       }
    }
 
-
+//************************************************************************************************/
 
 
    public function profilePage()
@@ -118,7 +120,7 @@ class Students extends Db implements Person
    }
 
 
-
+//************************************************************************************************/
    public function updateProfile()
    {
       try {
@@ -163,7 +165,7 @@ class Students extends Db implements Person
       }
    }
 
-
+//************************************************************************************************/
 
    public function getSession()
    {
@@ -174,7 +176,7 @@ class Students extends Db implements Person
    }
 
 
-
+//************************************************************************************************/
 
    public function deleteSession()
    {
@@ -185,6 +187,9 @@ class Students extends Db implements Person
          header('location:login.php');
       }
    }
+
+
+//************************************************************************************************/
 
    public function uploadPicture()
    {
@@ -225,7 +230,7 @@ class Students extends Db implements Person
       }
    }
 
-
+//************************************************************************************************/
 
    public function changePassowrd()
    {
@@ -290,7 +295,7 @@ class Students extends Db implements Person
          echo $ex;
       }
    }
-
+//************************************************************************************************/
 
    public function delete()
    {

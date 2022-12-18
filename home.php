@@ -3,7 +3,7 @@ $_title = 'Home';
 require_once __DIR__ . '/template/header.php';
 $student = new Students();
 $a = $student->profilePage();
-// $d = $student->delProfile();
+
 
 //convert age from date of birth
 $dob = new DateTime($a[0]->dob);
@@ -13,7 +13,6 @@ $year = $dob->diff($today)->y;
 
 <div class="main-content">
     <div class="container mt-7">
-        <!-- Table -->
         <h2 class="mb-5">Welcome <?php echo $a[0]->name; ?></h2>
         <div class="row">
             <div class="col-xl-8 m-auto order-xl-2 mb-5 mb-xl-0">

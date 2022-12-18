@@ -27,7 +27,7 @@ $msg = $student->createProfile();
         <hr class="my-4">
 
 
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data" onsubmit="return validatePassword();">
+        <form method="post" action="<?php //echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data" onsubmit="return validatePassword();">
         <?php  if(isset($msg)){echo '<label class="text-danger">'.$msg.'</label>';}?>
        
         
